@@ -30,8 +30,31 @@ class HTMLUI {
       ${name}
       <span class="span">${amount}$</span>
     `
-    console.log(li);
     expenses.appendChild(li)
+  }
+
+  showresidualBudget(amount) {
+    const showLeftBudget = budget.subBudg(amount)
+    budgetLeft.innerHTML = `${showLeftBudget}`
+    
+    if((budget.budget / 4) >= showLeftBudget) {
+      budgetLeft.parentElement.classList.remove('color', 'color1')
+      budgetLeft.parentElement.classList.add('color2')
+    } else if ((budget.budget / 2) >= showLeftBudget) {
+      budgetLeft.parentElement.classList.add('color1')
+    }
+
+  }
+}
+
+class Budget {
+  constructor(budget) {
+    this.budget = budget
+    this.budgetLeft = this.budget
+  }
+
+  subBudg(amount) {
+    return this.budgetLeft -= amount
   }
 }
 
@@ -42,6 +65,7 @@ const html = new HTMLUI()
 let budgetTotal = document.querySelector('span#total')
 let budgetLeft = document.querySelector('span#residual')
 const form = document.querySelector('#add-expense')
+let budget;
 
 
 // eventListeners
@@ -53,7 +77,8 @@ function eventListeners() {
     if (userBudget === '' || userBudget === '0' || userBudget === null) {
       window.location.reload()
     } else {
-      html.insertBudget(userBudget)
+      budget = new Budget(userBudget)
+      html.insertBudget(budget.budget)
     }
     form.addEventListener('submit', function(e) {
       e.preventDefault()
@@ -65,6 +90,7 @@ function eventListeners() {
         html.showError('Please Complete All Fields')
       } else {
         html.insertIntoExpensesList(expense, amount)
+        html.showresidualBudget(amount)
       }
     })
   })
