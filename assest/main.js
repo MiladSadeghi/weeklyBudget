@@ -20,6 +20,19 @@ class HTMLUI {
 
     form.reset()
   }
+
+  insertIntoExpensesList(name, amount) {
+    const expenses = document.querySelector('#expenses ul')
+
+    let li = document.createElement('li')
+    li.classList.add('li')
+    li.innerHTML = `
+      ${name}
+      <span class="span">${amount}$</span>
+    `
+    console.log(li);
+    expenses.appendChild(li)
+  }
 }
 
 
@@ -50,6 +63,8 @@ function eventListeners() {
 
       if(expense == '' || amount == '') {
         html.showError('Please Complete All Fields')
+      } else {
+        html.insertIntoExpensesList(expense, amount)
       }
     })
   })
